@@ -1,0 +1,51 @@
+{
+  "name": "dsh-wechat-html",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DeepSeek Harness plugin: 把 markdown 按主题模板排版成微信公众号可直接使用的内联样式 HTML（不需要公众号凭据）。",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./render": {
+      "default": "./lib/render/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/**/*.js",
+    "lib/themes/*.css",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "highlight.js": "^11.11.1",
+    "juice": "^12.1.2",
+    "marked": "^18.0.9"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  }
+}
