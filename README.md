@@ -5,8 +5,8 @@ DeepSeek Harness 插件：把 markdown 按主题模板排版成**微信公众号
 这是一个独立的微信公众号排版插件，不需要公众号凭据，也不依赖发布插件。
 只安装这一个插件即可生成 HTML，并手工粘贴进公众平台编辑器。
 
-如果另外安装了 `dsh-wechat-push`，可以把生成的 HTML 和图片
-继续投递到草稿箱；这种组合属于公开输出格式的可选消费，不构成本插件的运行时依赖。
+生成的 HTML 和图片清单也可以交给任意兼容工具继续上传或发布；这种集成只消费公开
+输出格式，不构成本插件的运行时依赖。
 
 ## 为什么需要它
 
@@ -55,14 +55,14 @@ markdown 进，微信可用的 HTML 出。写两个文件并返回它们的路�
 ```jsonc
 {
   "formatVersion": 1,
-  "htmlPath": "…/AI-daily-20260927085547.html",     // 喂给 mp_create_draft
-  "previewPath": "…/AI-daily-20260927085547.preview.html",
+  "htmlPath": "…/example-article.html",
+  "previewPath": "…/example-article.preview.html",
   "bytes": 15164,
   "theme": "default",
-  "title": "AI 日报｜…",
+  "title": "示例文章",
   "images": [
     { "token": "dsh-wechat-image-0", "source": "IMAGE_PLACEHOLDER", "isLocal": true,
-      "resolvedPath": "C:\\path\\to\\article\\AI-daily-20260927085547.png",
+      "resolvedPath": "C:\\path\\to\\article\\cover.png",
       "exists": true, "alt": "" }
   ],
   "warnings": []
@@ -70,7 +70,7 @@ markdown 进，微信可用的 HTML 出。写两个文件并返回它们的路�
 ```
 
 图片 `src` 返回的是**占位 token** 而不是地址。每种本地图都要先上传，再在
-`mp_create_draft` 里给出 token → 地址（或 token → 本地路径）的映射。
+下游发布工具中给出 token → 地址的映射。
 
 `formatVersion` 是返回结构的版本号；只有发生不兼容变更时才会递增。`warnings` 会提示
 远程图片、找不到的本地图片、潜在危险的原始 HTML，以及未能降级的 CSS。警告不会阻止
@@ -114,9 +114,8 @@ const finalHtml = fillImageUrls(html, {
 }, { strict: true })
 ```
 
-> 注意解析上下文：从工作区脚本里 import 这个包时，必须让**被 import 的那个文件位于 profile 内**
-> （用绝对 `file://` 路径），否则它自己的 `juice` / `marked` / `cheerio` / `highlight.js`
-> 解析不到。`../../.dsh/skills/ai-news-wechat/scripts/make-html.mjs` 就是这么做的。
+> 在自定义脚本中使用时，请通过包名和公开的 `./render` export 导入，并确保脚本运行环境
+> 能按 Node.js 的标准模块解析规则找到该包及其依赖。
 
 ## 提供的 Host 服务
 
@@ -126,8 +125,7 @@ const finalHtml = fillImageUrls(html, {
 - `previewDocument(html, title)`
 - `themes` / `codeThemes` —— 可用枚举
 
-`dsh-wechat-push` 的「发公众号」按钮可选消费它：装了本插件按钮就能从 markdown 起步，
-没装则回一句明白话。这就是两个插件之间唯一的耦合面。
+任何下游工具都可以选择消费该服务；双方只通过上述公开接口和渲染结果结构交互。
 
 ## 安全边界
 

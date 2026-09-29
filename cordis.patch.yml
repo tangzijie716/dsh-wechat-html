@@ -1,8 +1,8 @@
 # dsh-wechat-html —— 排版半边（无凭据）
 #
 # 只做一件事：markdown → 微信公众号可直接用的内联样式 HTML。
-# 与投递半边 dsh-wechat-push 完全独立，两边都装、都开即可；
-# 单独装这一个也能用（把生成的 HTML 手工粘进公众号后台编辑器）。
+# 与上传、发布能力完全独立；单独安装即可生成 HTML，既可以手工粘贴进
+# 公众号后台，也可以交给任何兼容的下游发布工具。
 #
 # 可覆盖的 config（在 profile 的 cordis.patch.yml 里按 id: wechat-html 改）：
 #   theme:        default | grace | simple
